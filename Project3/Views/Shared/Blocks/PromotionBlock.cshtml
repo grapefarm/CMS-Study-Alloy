@@ -1,0 +1,36 @@
+@model PromotionBlock
+
+<section class="promotion-block card h-100">
+    @if (!ContentReference.IsNullOrEmpty(Model.Image))
+    {
+        <img class="card-img-top"
+             src="@Url.ContentUrl(Model.Image)"
+             alt="@Model.ImageAltText"
+             @Html.EditAttributes(x => x.Image) />
+    }
+    else if (Html.ViewContext.IsInEditMode())
+    {
+        <div class="card-img-top bg-light p-4 text-muted" @Html.EditAttributes(x => x.Image)>
+            請在右側屬性面板選擇促銷圖片。
+        </div>
+    }
+
+    <div class="card-body d-flex flex-column">
+        <h2 class="card-title h3" @Html.EditAttributes(x => x.Heading)>@Model.Heading</h2>
+
+        <div class="card-text" @Html.EditAttributes(x => x.Body)>
+            @Html.PropertyFor(x => x.Body)
+        </div>
+
+        @if (Model.ButtonLink != null && !Model.ButtonLink.IsEmpty() && !string.IsNullOrWhiteSpace(Model.ButtonText))
+        {
+            <a class="btn btn-primary mt-auto align-self-start"
+               href="@Url.ContentUrl(Model.ButtonLink)"
+               @Html.EditAttributes(x => x.ButtonText)>@Model.ButtonText</a>
+        }
+        else if (Html.ViewContext.IsInEditMode())
+        {
+            <span class="text-muted" @Html.EditAttributes(x => x.ButtonText)>請設定按鈕文字與連結。</span>
+        }
+    </div>
+</section>

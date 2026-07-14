@@ -1,0 +1,17 @@
+﻿@using EPiServer.Web.Mvc.Html
+@model ImageBlock
+
+@if (Model != null && !ContentReference.IsNullOrEmpty(Model.ImageUrl))
+{
+    <div class="custom-image-block">
+        <img src="@Url.ContentUrl(Model.ImageUrl)" 
+             alt="@Model.AltText" 
+             class="img-fluid" />
+    </div>
+}
+else if (EPiServer.Editor.PageEditing.PageIsInEditMode)
+{
+    <div class="alert alert-info">
+        請點擊此處並在右側屬性面板上傳圖片。
+    </div>
+}
