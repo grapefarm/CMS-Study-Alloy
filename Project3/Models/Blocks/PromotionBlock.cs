@@ -3,6 +3,7 @@ using EPiServer.Core;
 using EPiServer.DataAbstraction;
 using EPiServer.DataAnnotations;
 using EPiServer.Web;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace Project3.Models.Blocks
@@ -21,6 +22,14 @@ namespace Project3.Models.Blocks
         [Required(AllowEmptyStrings = false)]
         [Display(Name = "標題", GroupName = SystemTabNames.Content, Order = 10)]
         public virtual string Heading { get; set; }
+
+        [CultureSpecific]
+        [Display(Name = "活動開始日", GroupName = SystemTabNames.Content, Order = 15)]
+        public virtual DateTime? CampaignStartDate { get; set; }
+
+        [CultureSpecific]
+        [Display(Name = "活動結束日", Description = "未填寫代表不設定結束時間", GroupName = SystemTabNames.Content, Order = 16)]
+        public virtual DateTime? CampaignEndDate { get; set; }
 
         [CultureSpecific]
         [Display(Name = "內文", GroupName = SystemTabNames.Content, Order = 20)]

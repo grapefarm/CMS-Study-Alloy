@@ -1,4 +1,4 @@
-@model PageViewModel<PromotionPage>
+@model PromotionPageViewModel
 
 @{ Layout = "~/Views/Shared/Layouts/_LeftNavigation.cshtml"; }
 
@@ -8,6 +8,8 @@
     <div class="lead" @Html.EditAttributes(x => x.CurrentPage.Introduction)>
         @Html.PropertyFor(x => x.CurrentPage.Introduction)
     </div>
+
+    <p class="text-muted">目前進行中的活動：@Model.ActivePromotionCount</p>
 
     @Html.PropertyFor(x => x.CurrentPage.PromotionItems, new { CssClass = "row" })
 </article>
