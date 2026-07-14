@@ -25,9 +25,10 @@ namespace Project3.Models.Blocks
         [CultureSpecific]
         [Display(
             Name = "圖片替代文字 (AltText)",
-            Description = "SEO 與無障礙網頁必填的圖片說明",
+            Description = "提供有意義圖片的說明；純裝飾圖片可留白",
             GroupName = SystemTabNames.Content,
             Order = 20)]
+        [StringLength(125)]
         public virtual string AltText { get; set; }
     }
 }

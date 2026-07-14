@@ -1,17 +1,19 @@
 ﻿@using EPiServer.Web.Mvc.Html
 @model ImageBlock
+@inject IContextModeResolver ContextModeResolver
 
 @if (Model != null && !ContentReference.IsNullOrEmpty(Model.ImageUrl))
 {
-    <div class="custom-image-block">
+    <figure class="image-block mb-0" @Html.EditAttributes(x => x.ImageUrl)>
         <img src="@Url.ContentUrl(Model.ImageUrl)" 
-             alt="@Model.AltText" 
-             class="img-fluid" />
-    </div>
+             alt="@(Model.AltText ?? string.Empty)"
+             class="img-fluid"
+             loading="lazy" />
+    </figure>
 }
-else if (EPiServer.Editor.PageEditing.PageIsInEditMode)
+else if (ContextModeResolver.CurrentMode.EditOrPreview())
 {
-    <div class="alert alert-info">
+    <div class="alert alert-info" role="status" @Html.EditAttributes(x => x.ImageUrl)>
         請點擊此處並在右側屬性面板上傳圖片。
     </div>
 }
