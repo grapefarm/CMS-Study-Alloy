@@ -1,6 +1,7 @@
 using EPiServer;
 using EPiServer.Core;
 using Microsoft.AspNetCore.Mvc;
+using Project3.Business.Promotions;
 using Project3.Models.Blocks;
 using Project3.Models.Pages;
 using Project3.Models.ViewModels;
@@ -15,34 +16,41 @@ namespace Project3.Controllers
     public class PromotionPageController : PageControllerBase<PromotionPage>
     {
         private readonly IContentLoader _contentLoader;
+        private readonly IPromotionStatusService _promotionStatusService;
 
-        public PromotionPageController(IContentLoader contentLoader)
+        public PromotionPageController(IContentLoader contentLoader, IPromotionStatusService promotionStatusService)
         {
             _contentLoader = contentLoader;
+            _promotionStatusService = promotionStatusService;
         }
 
         public IActionResult Index(PromotionPage currentPage)
         {
-            var model = new PromotionPageViewModel(currentPage)
-            {
-                ActivePromotionCount = CountActivePromotions(currentPage, DateTime.Today)
-            };
+            var model = CreateModel(currentPage, DateTime.Today);
 
             return View(model);
         }
 
-        private int CountActivePromotions(PromotionPage page, DateTime today)
+        private PromotionPageViewModel CreateModel(PromotionPage page, DateTime today)
         {
+            var model = new PromotionPageViewModel(page);
+
             if (page.PromotionItems == null)
             {
-                return 0;
+                return model;
             }
 
-            return page.PromotionItems.FilteredItems
+            var promotionStatuses = page.PromotionItems.FilteredItems
                 .Select(item => TryLoadPromotion(item.ContentLink))
-                .Count(promotion => promotion != null &&
-                    (!promotion.CampaignStartDate.HasValue || promotion.CampaignStartDate.Value.Date <= today) &&
-                    (!promotion.CampaignEndDate.HasValue || promotion.CampaignEndDate.Value.Date >= today));
+                .Where(promotion => promotion != null)
+                .Select(promotion => _promotionStatusService.GetStatus(promotion, today))
+                .ToList();
+
+            model.ActivePromotionCount = promotionStatuses.Count(status =>
+                status == PromotionStatus.Active || status == PromotionStatus.EndingSoon);
+            model.EndingSoonPromotionCount = promotionStatuses.Count(status => status == PromotionStatus.EndingSoon);
+
+            return model;
         }
 
         private PromotionBlock TryLoadPromotion(ContentReference contentLink)

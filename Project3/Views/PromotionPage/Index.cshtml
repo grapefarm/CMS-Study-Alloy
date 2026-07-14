@@ -11,5 +11,10 @@
 
     <p class="text-muted">目前進行中的活動：@Model.ActivePromotionCount</p>
 
+    @if (Model.EndingSoonPromotionCount > 0)
+    {
+        <p class="alert alert-warning">有 @Model.EndingSoonPromotionCount 個活動將在七天內結束。</p>
+    }
+
     @Html.PropertyFor(x => x.CurrentPage.PromotionItems, new { CssClass = "row" })
 </article>

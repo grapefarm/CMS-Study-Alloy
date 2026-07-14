@@ -13,5 +13,7 @@ namespace Project3.Models.ViewModels
         }
 
         public int ActivePromotionCount { get; set; }
+
+        public int EndingSoonPromotionCount { get; set; }
     }
 }

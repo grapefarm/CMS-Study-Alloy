@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.Extensions.DependencyInjection;
 using Project3.Business;
 using Project3.Business.Channels;
+using Project3.Business.Promotions;
 using Project3.Business.Rendering;
 
 namespace Project3.Extensions
@@ -26,6 +27,7 @@ namespace Project3.Extensions
 
             services.AddDisplayResolutions();
             services.AddDetection();
+            services.AddSingleton<IPromotionStatusService, PromotionStatusService>();
 
             return services;
         }
